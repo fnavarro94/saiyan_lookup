@@ -3,7 +3,18 @@ import numpy as np
 
 filePath = "files/test.txt"
 f = open(filePath, 'r').readlines()
+'''
+This script parses a Jet correction txt file and stores its components in arrays.
+It creates the following variables:
 
+1) binParameters     list with the names of the variables that are expected to perform the lookup
+2) funcParameters    list with the names of the variables that are expected to evaluate the function
+3) bins              list with the binnig of the binParameters  * currently only for 1D, one binParameter
+4) funcParamLimits_vec    a vector containing dictionaries each with the the upper an lower limits of the function parameters 
+5) tableFuncParams        a vector containing the table function parameters 
+
+
+'''
 
 bins = [] #contains bin values
 binsTemp = [] # used to build bins variable
