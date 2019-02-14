@@ -20,6 +20,8 @@ params = params_raw
 
 num_binParams = int(params[0])
 num_funcParams = int(params[num_binParams + 1])
+num_allParams = num_binParams + num_funcParams
+num_tableFuncParams = int(f[1].split()[num_binParams*2])-num_funcParams*2
 function = params[2+num_funcParams+num_binParams]
 
 for n in range(1,num_binParams + 1):
@@ -27,15 +29,26 @@ for n in range(1,num_binParams + 1):
 for n in range(num_binParams +2,num_binParams+num_funcParams+2):
 	functionParameters.append(params[n])
 
+# Function parameters limits dictionary
+funcParamLimits_dict = {}
+funcParamLimits_vec = []
+tableFuncParams = []
+
 for n, line in enumerate(f):
+	tableFuncParams_temp = []
 	if n==0 or line=='\n':
 		continue
 	else:
-		print n
 		vecLine = line.split()
 		bins.append(vecLine[0])
 		binsTemp.append(vecLine[1])
 		
+		for i in range(0,num_funcParams):
+			funcParamLimits_dict[functionParameters[i]] = [vecLine[num_binParams*2 + 2*i +1],vecLine[num_binParams*2 + 2*i +2 ]]
+		funcParamLimits_vec.append(funcParamLimits_dict)
+		for i in range(0, num_tableFuncParams):
+			tableFuncParams_temp.append(vecLine[num_allParams*2+1+i])
+		tableFuncParams.append(tableFuncParams_temp)
 bins.append(binsTemp[len(binsTemp)-1])
 
 
