@@ -54,8 +54,8 @@ class CorrectionParser(object):
 				continue
 			else:
 				vecLine = line.split()
-				bins.append(vecLine[0])
-				binsTemp.append(vecLine[1])
+				bins.append(float(vecLine[0]))
+				binsTemp.append(float(vecLine[1]))
 				
 				for i in range(0,num_funcParams):
 					funcParamLimits_dict[functionParameters[i]] = [vecLine[num_binParams*2 + 2*i +1],vecLine[num_binParams*2 + 2*i +2 ]]
@@ -66,9 +66,15 @@ class CorrectionParser(object):
 		bins.append(binsTemp[len(binsTemp)-1])
 		self.binParameters  = binParameters   
 		self.functionParameters = functionParameters
-		self.bins           = bins        
+		self.bins           = np.array(bins)        
 		self.funcParamLimits_vec   = funcParamLimits_vec 
 		self.tableFuncParams       = tableFuncParams
+
+	def evalIndex(self, binParam,):
+		
+		bins = self.bins
+		index = np.searchsorted(bins,binParam, side='right')-1
+		return index
 		
 		
 	
