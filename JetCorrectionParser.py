@@ -87,7 +87,6 @@ class CorrectionParser(object):
 				
 				for i in range(0,num_funcParams):
 					funcParamLimits_dict[functionParameters[i]]=np.append(funcParamLimits_dict[functionParameters[i]],[[float(vecLine[num_binParams*2 + 2*i +1])],[float(vecLine[num_binParams*2 + 2*i +2 ])]],axis=1)
-				#funcParamLimits_vec.append(funcParamLimits_dict)
 				for i in range(0, num_tableFuncParams):
 					tableFuncParams_temp.append(vecLine[num_allParams*2+1+i])
 				tableFuncParams.append(tableFuncParams_temp)
@@ -121,7 +120,10 @@ class CorrectionParser(object):
 		evalVars = []
 		for n, var in enumerate(parameters):
 			if n != 0:
-				evalVars.append(np.maximum(parameters[n],[self.funcParamLimits_dict[self.funcParamLimits_dict.keys()[n-1]][0][index]]))
+				
+				evalVars_temp = np.maximum(parameters[n],[self.funcParamLimits_dict[self.functionParameters[n-1]][0][index]])
+				evalVars.append(np.minimum(evalVars_temp,[self.funcParamLimits_dict[self.functionParameters[n-1]][1][index]]))
+				#evalVars.append(np.maximum(parameters[n],[self.funcParamLimits_dict[self.functionParameters[n-1]][1][index]]))
 		return evalVars
 			
 		
