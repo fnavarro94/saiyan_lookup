@@ -121,7 +121,7 @@ class CorrectionParser(object):
 		evalVars = []
 		for n, var in enumerate(parameters):
 			if n != 0:
-				evalVars.append(np.maximum(parameters[n],self.funcParamLimits_dict[self.funcParamLimits_dict.keys()[n-1]][index]))
+				evalVars.append(np.maximum(parameters[n],[self.funcParamLimits_dict[self.funcParamLimits_dict.keys()[n-1]][0][index]]))
 		return evalVars
 			
 		
