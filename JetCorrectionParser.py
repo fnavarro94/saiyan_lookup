@@ -72,9 +72,11 @@ class CorrectionParser(object):
 		funcParamLimits_dict = {}
 		for i in functionParameters:
 			funcParamLimits_dict[i] = np.empty([2,0])
+		tableFuncParams = {}
+		for i in tableFunctionParameters:
+			tableFuncParams[i] = np.empty([0])
 		
-		funcParamLimits_vec = []
-		tableFuncParams = []
+		
 
 		for n, line in enumerate(f):
 			tableFuncParams_temp = []
@@ -88,8 +90,8 @@ class CorrectionParser(object):
 				for i in range(0,num_funcParams):
 					funcParamLimits_dict[functionParameters[i]]=np.append(funcParamLimits_dict[functionParameters[i]],[[float(vecLine[num_binParams*2 + 2*i +1])],[float(vecLine[num_binParams*2 + 2*i +2 ])]],axis=1)
 				for i in range(0, num_tableFuncParams):
-					tableFuncParams_temp.append(vecLine[num_allParams*2+1+i])
-				tableFuncParams.append(tableFuncParams_temp)
+					tableFuncParams[tableFunctionParameters[i]]=np.append(tableFuncParams[tableFunctionParameters[i]],float(vecLine[num_allParams*2+1+i]))
+				
 		bins.append(binsTemp[len(binsTemp)-1])
 		
 		
@@ -120,11 +122,21 @@ class CorrectionParser(object):
 		evalVars = []
 		for n, var in enumerate(parameters):
 			if n != 0:
+				# clamping the function paramterer values to the minimums and maximums defined in correction txt file
+				evalVars_temp = np.maximum(np.array(parameters[n]),self.funcParamLimits_dict[self.functionParameters[n-1]][0][index])
+				evalVars.append(np.minimum(evalVars_temp,self.funcParamLimits_dict[self.functionParameters[n-1]][1][index]))
+				self.a =  np.array(parameters[n])
+				self.b=self.funcParamLimits_dict[self.functionParameters[n-1]][0][index]
+		#for i, val in enumerate(evalVars):
+		#	for j, val2 in enumerate(val):
 				
-				evalVars_temp = np.maximum(parameters[n],[self.funcParamLimits_dict[self.functionParameters[n-1]][0][index]])
-				evalVars.append(np.minimum(evalVars_temp,[self.funcParamLimits_dict[self.functionParameters[n-1]][1][index]]))
-				#evalVars.append(np.maximum(parameters[n],[self.funcParamLimits_dict[self.functionParameters[n-1]][1][index]]))
-		return evalVars
+		
+		for n, var in enumerate(self.tableFuncParams):
+			evalVars.append(self.tableFuncParams[self.tableFuncParamsNames[n]][index])
+			#print self.tableFuncParams[self.tableFuncParamsNames[n]][index]
+		self.vars = evalVars
+		#result = self.function(*tuple(evalVars))
+		#return result
 			
 		
 	
