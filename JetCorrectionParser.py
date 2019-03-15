@@ -64,6 +64,7 @@ class CorrectionParser(object):
 			strFunction = function
 		# turn string function into lamda function 
 		lstr = "lambda %s: %s" % (",".join(allParams), function)
+		function_def = lstr
 		function = eval(lstr)
 		# Function parameters limits dictionary
 		funcParamLimits_dict = {}
@@ -95,11 +96,12 @@ class CorrectionParser(object):
 		self.funcParams = functionParameters
 		self.bins           = np.array(bins)        
 		self.funcParamLimits   = funcParamLimits_dict
-		self.tableFuncParamsValues       = tableFuncParams
+		self.tableFuncParamValues       = tableFuncParams
 		self.tableFuncParams = tableFunctionParameters
 		self.allParams = allParams
 		self.function=function
 		self.strFunction = strFunction
+		self.defFunction = function_def
 
 	
 	def evalIndex(self, binParam):
@@ -121,7 +123,7 @@ class CorrectionParser(object):
 				self.b=self.funcParamLimits[self.funcParams[n-1]][0][index]
 					
 		for n, var in enumerate(self.tableFuncParams):
-			evalVars.append(self.tableFuncParamsValues[self.tableFuncParams[n]][index])
+			evalVars.append(self.tableFuncParamValues[self.tableFuncParams[n]][index])
 			
 		self.vars=evalVars
 		
