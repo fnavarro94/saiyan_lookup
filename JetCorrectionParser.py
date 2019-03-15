@@ -127,13 +127,24 @@ class CorrectionParser(object):
 				evalVars.append(np.minimum(evalVars_temp,self.funcParamLimits_dict[self.functionParameters[n-1]][1][index]))
 				self.a =  np.array(parameters[n])
 				self.b=self.funcParamLimits_dict[self.functionParameters[n-1]][0][index]
-		#for i, val in enumerate(evalVars):
-		#	for j, val2 in enumerate(val):
+		
+		
+				
 				
 		
 		for n, var in enumerate(self.tableFuncParams):
 			evalVars.append(self.tableFuncParams[self.tableFuncParamsNames[n]][index])
 			#print self.tableFuncParams[self.tableFuncParamsNames[n]][index]
+		invert = []
+		for i in range(len(evalVars[0])):
+			invertTemp = np.empty(0)
+			for j in range(len(evalVars)):
+				invertTemp = np.append(invertTemp, evalVars[j][i])
+				
+			invert.append(invertTemp)
+			
+			
+		print invert
 		self.vars = evalVars
 		#result = self.function(*tuple(evalVars))
 		#return result
