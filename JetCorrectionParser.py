@@ -21,8 +21,6 @@ It creates the following variables:
 
 '''
 
-
-
 class CorrectionParser(object):
 	
 	def __init__ (self, file_path):
@@ -33,7 +31,6 @@ class CorrectionParser(object):
 		functionParameters = [] # names of the expected parameters required to evaluate the function
 		tableFunctionParameters = [] # names of the table function parameters as they will be named in the function (p1,p2,p3)
 		possibleCorrections = ['L1FastJet','L2Relative','L3Absolute']
-
 
 		params_raw = f[0].strip().strip('{').strip('}').split()
 		params_raw[0].strip('{')
@@ -76,8 +73,6 @@ class CorrectionParser(object):
 		for i in tableFunctionParameters:
 			tableFuncParams[i] = np.empty([0])
 		
-		
-
 		for n, line in enumerate(f):
 			tableFuncParams_temp = []
 			if n==0 or line=='\n':
@@ -94,17 +89,14 @@ class CorrectionParser(object):
 				
 		bins.append(binsTemp[len(binsTemp)-1])
 		
-		
-		
-		
-		self.num_binParams = num_binParams
-		self.num_funcParams = num_funcParams
-		self.binParameters  = binParameters   
-		self.functionParameters = functionParameters
+		self.nBinParams = num_binParams
+		self.nFuncParams = num_funcParams
+		self.binParams  = binParameters   
+		self.funcParams = functionParameters
 		self.bins           = np.array(bins)        
-		self.funcParamLimits_dict   = funcParamLimits_dict
-		self.tableFuncParams       = tableFuncParams
-		self.tableFuncParamsNames = tableFunctionParameters
+		self.funcParamLimits   = funcParamLimits_dict
+		self.tableFuncParamsValues       = tableFuncParams
+		self.tableFuncParams = tableFunctionParameters
 		self.allParams = allParams
 		self.function=function
 		self.strFunction = strFunction
@@ -123,18 +115,14 @@ class CorrectionParser(object):
 		for n, var in enumerate(parameters):
 			if n != 0:
 				# clamping the function paramterer values to the minimums and maximums defined in correction txt file
-				evalVars_temp = np.maximum(np.array(parameters[n]),self.funcParamLimits_dict[self.functionParameters[n-1]][0][index])
-				evalVars.append(np.minimum(evalVars_temp,self.funcParamLimits_dict[self.functionParameters[n-1]][1][index]))
+				evalVars_temp = np.maximum(np.array(parameters[n]),self.funcParamLimits[self.funcParams[n-1]][0][index])
+				evalVars.append(np.minimum(evalVars_temp,self.funcParamLimits[self.funcParams[n-1]][1][index]))
 				self.a =  np.array(parameters[n])
-				self.b=self.funcParamLimits_dict[self.functionParameters[n-1]][0][index]
-		
-		
-				
-				
-		
+				self.b=self.funcParamLimits[self.funcParams[n-1]][0][index]
+					
 		for n, var in enumerate(self.tableFuncParams):
-			evalVars.append(self.tableFuncParams[self.tableFuncParamsNames[n]][index])
-			#print self.tableFuncParams[self.tableFuncParamsNames[n]][index]
+			evalVars.append(self.tableFuncParamsValues[self.tableFuncParams[n]][index])
+			
 		self.vars=evalVars
 		
 		result = self.function(*tuple(evalVars))
